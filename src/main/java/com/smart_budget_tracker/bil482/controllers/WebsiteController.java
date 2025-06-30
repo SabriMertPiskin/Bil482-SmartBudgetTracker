@@ -4,12 +4,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
- * This is a Example Controller
+ * WebsiteController
+ * 
  * @author Çağan Durgun
  */
 @Controller
-public class ExampleController {
-    
+public class WebsiteController {
+
     /// Yazılımın giriş fonksiyonu.
     /// http://localhost:8080 linki ile erişilebilir.
     @GetMapping("/")
