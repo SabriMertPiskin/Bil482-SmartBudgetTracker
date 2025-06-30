@@ -1,28 +1,47 @@
 package com.smart_budget_tracker.bil482.controllers;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import com.smart_budget_tracker.bil482.entity.Expense;
+import com.smart_budget_tracker.bil482.service.ExpenseService;
+
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 /**
- * ExpenseController
- * 
  * @author Çağan Durgun
  */
-@Controller
+@RestController
+@RequestMapping("/expenses")
 public class ExpenseController {
 
-    @GetMapping("/add")
-    public void addExpense() {
+    private final ExpenseService expenseService;
 
+    public ExpenseController(ExpenseService expenseService) {
+        this.expenseService = expenseService;
     }
 
-    @GetMapping("/edit")
-    public void editExpense() {
-
+    @GetMapping
+    public List<Expense> getAllExpenses() {
+        return expenseService.getAllExpenses();
     }
 
-    @GetMapping("/delete")
-    public void deleteExpense() {
+    @PostMapping
+    public ResponseEntity<Expense> addExpense(@RequestBody Expense expense) {
+        Expense created = expenseService.addExpense(expense);
+        return ResponseEntity.ok(created);
+    }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Expense> editExpense(@PathVariable Long id, @RequestBody Expense expense) {
+        expense.setId(id); // Path’den gelen id ile body id senkronize
+        Expense updated = expenseService.editExpense(expense);
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteExpense(@PathVariable Long id) {
+        expenseService.deleteExpense(id);
+        return ResponseEntity.noContent().build();
     }
 }

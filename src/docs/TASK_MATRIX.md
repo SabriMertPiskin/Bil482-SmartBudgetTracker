@@ -40,12 +40,12 @@
 | SDD - Change Log                       | Yapılan değişiklikler ve versiyon geçmişi                                   |                     |                   | ✅ Completed   | June 29, 2025  |
 | SDD - Future Work / Open Issues        | Gelecek planları, bilinen eksiklikler ve iyileştirme alanları               |                     |                   | ✅ Completed   | June 29, 2025  |
 |                                        |                                                                             |                     |                   |                |                |
-| Backend - ER Diagram                   | Entity Relationship Diagram tasarımı (basit yapı)                           | Çağan Durgun        |                   | ✅ Completed   | June 23, 2025  |
-| Backend - Database Setup               | Veritabanı yapısının oluşturulması (tercihen MySQL)                         |                     |                   | ✅ Completed   | June 24, 2025  |
+| Backend - ER Diagram                   | Entity Relationship Diagram tasarımı (basit yapı)                           |                     | Çağan Durgun      | ✅ Completed   | June 23, 2025  |
+| Backend - Database Setup               | Veritabanı yapısının oluşturulması (tercihen MySQL)                         | Çağan Durgun        |                   | ✅ Completed   | June 24, 2025  |
 | Backend - API Implementation           | Add/Edit/Delete Expense için endpoint yazımı                                | Çağan Durgun        |                   | ✅ Completed   | June 28, 2025  |
 | Frontend - UI Design                   | Expense işlemleri için arayüz tasarımı                                      |                     |                   | ✅ Completed   | June 27, 2025  |
 | Frontend - API Integration             | Endpoint'lerin frontend'e entegre edilmesi                                  |                     | Çağan Durgun      | ✅ Completed   | June 29, 2025  |
-| Integration & Testing                  | Uçtan uca test, hataların giderilmesi                                       |                     |                   | ✅ Completed   | June 30, 2025  |
+| Integration & Testing                  | Uçtan uca test, hataların giderilmesi                                       | Çağan Durgun        |                   | ✅ Completed   | June 30, 2025  |
 |                                        |                                                                             |                     |                   |                |                |
 | GitHub Repository Setup                | Repo yapısı, dizin organizasyonu                                            |                     |                   | ✅ Completed   | June 25, 2025  |
 | `TASK_MATRIX.md`                       | Görev dağılımı dokümantasyonu                                               |                     |                   | ✅ Completed   | June 26, 2025  |

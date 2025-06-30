@@ -36,3 +36,5 @@ Eğer ana dalın adı farklıysa `main` yerine onun ismini yaz.
 ⚠️ Not: Bu yapılandırma, projenin yerel geliştirme ortamında (localhost) sağlıklı çalışması için gereklidir. Aksi durumda bağlantı hataları meydana gelebilir. 
 
 - `pom.xml` dosyası güncellenerek gerekli bağımlılıklar eklendi. Özellikle Spring Boot, JPA, Lombok ve MySQL için ihtiyaç duyulan bağımlılıklar doğru versiyonlarla projeye entegre edildi.
+
+- DB ayakta, edit fonksiyonu dışında çalışıyor.

@@ -1,673 +1,211 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Smart Budget Tracker</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
+            font-family: Arial, sans-serif;
+            margin: 2rem;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 20px 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo i {
-            font-size: 2rem;
-            color: #667eea;
-        }
-
-        .logo h1 {
-            color: #333;
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .notification-bell {
-            position: relative;
-            font-size: 1.5rem;
-            color: #667eea;
-            cursor: pointer;
-        }
-
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #ff4757;
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .card-header i {
-            font-size: 1.5rem;
-            color: #667eea;
-        }
-
-        .card-header h2 {
-            color: #333;
-            font-size: 1.3rem;
-            font-weight: 600;
-        }
-
-        .quick-add-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 15px;
-        }
-
-        .form-group {
-            flex: 1;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #555;
-            font-weight: 500;
-        }
-
-        .form-group input,
-        .form-group select {
+        input,
+        select {
+            margin: 0.5rem 0;
+            padding: 0.3rem;
             width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
+            max-width: 300px;
         }
 
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #667eea;
+        button {
+            padding: 0.5rem 1rem;
+            margin-top: 0.5rem;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.3s ease;
+        table {
+            border-collapse: collapse;
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 700px;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 0.5rem;
+            text-align: left;
         }
 
-        .budget-overview {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .budget-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-
-        .budget-category {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .category-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
-        }
-
-        .food { background: #ff6b6b; }
-        .transport { background: #4ecdc4; }
-        .entertainment { background: #45b7d1; }
-        .shopping { background: #f9ca24; }
-        .utilities { background: #6c5ce7; }
-
-        .budget-progress {
-            flex: 1;
-            margin: 0 15px;
-        }
-
-        .progress-bar {
-            height: 8px;
-            background: #e0e0e0;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 5px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 0.3s ease;
-        }
-
-        .safe { background: #2ed573; }
-        .warning { background: #ffa502; }
-        .danger { background: #ff4757; }
-
-        .budget-amount {
-            text-align: right;
-        }
-
-        .spent {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .limit {
-            font-size: 0.9rem;
-            color: #777;
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .chart-container {
-            height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #f8f9fa;
-            border-radius: 10px;
-            color: #777;
-            font-size: 1.1rem;
-        }
-
-        .recent-transactions {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .transaction-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .transaction-item:last-child {
-            border-bottom: none;
-        }
-
-        .transaction-details {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .transaction-amount {
-            font-weight: 600;
-            color: #ff4757;
-        }
-
-        .transaction-date {
-            font-size: 0.9rem;
-            color: #777;
-        }
-
-        .bottom-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 30px;
-        }
-
-        .stat-card {
-            text-align: center;
-            padding: 30px 20px;
-        }
-
-        .stat-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-
-        .stat-label {
-            font-size: 1rem;
-            color: #777;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .notifications-panel {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 300px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            display: none;
-            z-index: 1000;
-        }
-
-        .notification-item {
-            padding: 15px;
-            border-bottom: 1px solid #e0e0e0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .notification-item:last-child {
-            border-bottom: none;
-        }
-
-        .notification-icon {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 0.9rem;
-        }
-
-        .warning-notif { background: #ffa502; }
-        .danger-notif { background: #ff4757; }
-
-        @media (max-width: 768px) {
-            .main-grid,
-            .dashboard-grid,
-            .bottom-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-
-            .form-row {
-                flex-direction: column;
-            }
+        tr:hover {
+            background-color: #f9f9f9;
         }
     </style>
 </head>
+
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="logo">
-                <i class="fas fa-wallet"></i>
-                <h1>Smart Budget Tracker</h1>
-            </div>
-            <div class="user-info">
-                <div class="notification-bell" onclick="toggleNotifications()">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-badge">3</span>
-                </div>
-                <span>Çağan Durgun</span>
-            </div>
-        </div>
 
-        <!-- Main Grid -->
-        <div class="main-grid">
-            <!-- Quick Add Expense -->
-            <div class="card">
-                <div class="card-header">
-                    <i class="fas fa-plus-circle"></i>
-                    <h2>Hızlı Harcama Ekle</h2>
-                </div>
-                <form class="quick-add-form">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="amount">Tutar</label>
-                            <input type="number" id="amount" placeholder="0.00" step="0.01">
-                        </div>
-                        <div class="form-group">
-                            <label for="category">Kategori</label>
-                            <select id="category">
-                                <option value="">Kategori Seçin</option>
-                                <option value="food">Yemek</option>
-                                <option value="transport">Ulaşım</option>
-                                <option value="entertainment">Eğlence</option>
-                                <option value="shopping">Alışveriş</option>
-                                <option value="utilities">Faturalar</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="description">Açıklama</label>
-                        <input type="text" id="description" placeholder="Harcama açıklaması">
-                    </div>
-                    <button type="submit" class="btn-primary">
-                        <i class="fas fa-plus"></i> Harcama Ekle
-                    </button>
-                </form>
-            </div>
+    <h1>Smart Budget Tracker</h1>
 
-            <!-- Budget Overview -->
-            <div class="card">
-                <div class="card-header">
-                    <i class="fas fa-chart-pie"></i>
-                    <h2>Bütçe Durumu</h2>
-                </div>
-                <div class="budget-overview">
-                    <div class="budget-item">
-                        <div class="budget-category">
-                            <div class="category-icon food">
-                                <i class="fas fa-utensils"></i>
-                            </div>
-                            <div>
-                                <div>Yemek</div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill safe" style="width: 60%"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="budget-amount">
-                            <div class="spent">₺1,200</div>
-                            <div class="limit">/ ₺2,000</div>
-                        </div>
-                    </div>
+    <h2>Add / Edit Expense</h2>
+    <form id="expenseForm">
+        <input type="hidden" id="expenseId" />
+        <label>
+            Title:<br />
+            <input type="text" id="title" required />
+        </label><br />
+        <label>
+            Amount:<br />
+            <input type="number" id="amount" step="0.01" min="0" required />
+        </label><br />
+        <label>
+            Category:<br />
+            <input type="text" id="category" required />
+        </label><br />
+        <label>
+            Date:<br />
+            <input type="date" id="date" required />
+        </label><br />
+        <button type="submit">Save Expense</button>
+        <button type="button" id="cancelEdit" style="display:none;">Cancel Edit</button>
+    </form>
 
-                    <div class="budget-item">
-                        <div class="budget-category">
-                            <div class="category-icon transport">
-                                <i class="fas fa-car"></i>
-                            </div>
-                            <div>
-                                <div>Ulaşım</div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill warning" style="width: 85%"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="budget-amount">
-                            <div class="spent">₺850</div>
-                            <div class="limit">/ ₺1,000</div>
-                        </div>
-                    </div>
-
-                    <div class="budget-item">
-                        <div class="budget-category">
-                            <div class="category-icon entertainment">
-                                <i class="fas fa-gamepad"></i>
-                            </div>
-                            <div>
-                                <div>Eğlence</div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill danger" style="width: 105%"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="budget-amount">
-                            <div class="spent">₺1,050</div>
-                            <div class="limit">/ ₺1,000</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Dashboard Grid -->
-        <div class="dashboard-grid">
-            <!-- Charts -->
-            <div class="card">
-                <div class="card-header">
-                    <i class="fas fa-chart-line"></i>
-                    <h2>Harcama Analizi</h2>
-                </div>
-                <div class="chart-container">
-                    <i class="fas fa-chart-bar" style="font-size: 3rem; color: #ccc;"></i>
-                    <span style="margin-left: 15px;">Grafik burada görüntülenecek</span>
-                </div>
-            </div>
-
-            <!-- Recent Transactions -->
-            <div class="card">
-                <div class="card-header">
-                    <i class="fas fa-history"></i>
-                    <h2>Son Harcamalar</h2>
-                </div>
-                <div class="recent-transactions">
-                    <div class="transaction-item">
-                        <div class="transaction-details">
-                            <div class="category-icon food">
-                                <i class="fas fa-utensils"></i>
-                            </div>
-                            <div>
-                                <div>Öğle Yemeği</div>
-                                <div class="transaction-date">Bugün, 14:30</div>
-                            </div>
-                        </div>
-                        <div class="transaction-amount">₺45.00</div>
-                    </div>
-
-                    <div class="transaction-item">
-                        <div class="transaction-details">
-                            <div class="category-icon transport">
-                                <i class="fas fa-bus"></i>
-                            </div>
-                            <div>
-                                <div>Otobüs Bileti</div>
-                                <div class="transaction-date">Bugün, 09:15</div>
-                            </div>
-                        </div>
-                        <div class="transaction-amount">₺15.00</div>
-                    </div>
-
-                    <div class="transaction-item">
-                        <div class="transaction-details">
-                            <div class="category-icon shopping">
-                                <i class="fas fa-shopping-bag"></i>
-                            </div>
-                            <div>
-                                <div>Market Alışverişi</div>
-                                <div class="transaction-date">Dün, 18:45</div>
-                            </div>
-                        </div>
-                        <div class="transaction-amount">₺156.50</div>
-                    </div>
-
-                    <div class="transaction-item">
-                        <div class="transaction-details">
-                            <div class="category-icon entertainment">
-                                <i class="fas fa-film"></i>
-                            </div>
-                            <div>
-                                <div>Sinema Bileti</div>
-                                <div class="transaction-date">Dün, 20:00</div>
-                            </div>
-                        </div>
-                        <div class="transaction-amount">₺35.00</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Bottom Statistics -->
-        <div class="bottom-grid">
-            <div class="card stat-card">
-                <div class="stat-value">₺3,125</div>
-                <div class="stat-label">Bu Ay Toplam</div>
-            </div>
-            <div class="card stat-card">
-                <div class="stat-value">₺875</div>
-                <div class="stat-label">Kalan Bütçe</div>
-            </div>
-            <div class="card stat-card">
-                <div class="stat-value">₺102</div>
-                <div class="stat-label">Günlük Ortalama</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Notifications Panel -->
-    <div class="notifications-panel" id="notificationsPanel">
-        <div class="notification-item">
-            <div class="notification-icon warning-notif">
-                <i class="fas fa-exclamation-triangle"></i>
-            </div>
-            <div>
-                <div><strong>Ulaşım Bütçesi</strong></div>
-                <div style="font-size: 0.9rem; color: #777;">Limitin %85'ine ulaştın</div>
-            </div>
-        </div>
-        <div class="notification-item">
-            <div class="notification-icon danger-notif">
-                <i class="fas fa-ban"></i>
-            </div>
-            <div>
-                <div><strong>Eğlence Bütçesi</strong></div>
-                <div style="font-size: 0.9rem; color: #777;">Limit aşıldı!</div>
-            </div>
-        </div>
-        <div class="notification-item">
-            <div class="notification-icon warning-notif">
-                <i class="fas fa-clock"></i>
-            </div>
-            <div>
-                <div><strong>Hatırlatma</strong></div>
-                <div style="font-size: 0.9rem; color: #777;">Aylık bütçeni güncellemeyi unutma</div>
-            </div>
-        </div>
-    </div>
+    <h2>Expense List</h2>
+    <table id="expenseTable">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Amount</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 
     <script>
-        function toggleNotifications() {
-            const panel = document.getElementById('notificationsPanel');
-            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+        const apiUrl = 'http://localhost:8080/expenses'; // Backend URL
+
+        const expenseForm = document.getElementById('expenseForm');
+        const expenseIdInput = document.getElementById('expenseId');
+        const titleInput = document.getElementById('title');
+        const amountInput = document.getElementById('amount');
+        const categoryInput = document.getElementById('category');
+        const dateInput = document.getElementById('date');
+        const cancelEditBtn = document.getElementById('cancelEdit');
+        const expenseTableBody = document.querySelector('#expenseTable tbody');
+
+        // Fetch and render expenses
+        async function fetchExpenses() {
+            try {
+                const res = await fetch(apiUrl);
+                const expenses = await res.json();
+                renderExpenses(expenses);
+            } catch (e) {
+                alert('Error loading expenses.');
+            }
         }
 
-        // Close notifications when clicking outside
-        document.addEventListener('click', function(event) {
-            const panel = document.getElementById('notificationsPanel');
-            const bell = document.querySelector('.notification-bell');
-            
-            if (!panel.contains(event.target) && !bell.contains(event.target)) {
-                panel.style.display = 'none';
-            }
-        });
-
-        // Form submission handling
-        document.querySelector('.quick-add-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const amount = document.getElementById('amount').value;
-            const category = document.getElementById('category').value;
-            const description = document.getElementById('description').value;
-            
-            if (amount && category && description) {
-                alert('Harcama başarıyla eklendi: ₺' + amount + ' - ' + description);
-                this.reset();
-            } else {
-                alert('Lütfen tüm alanları doldurun!');
-            }
-        });
-
-        // Dynamic progress bar animations
-        window.addEventListener('load', function() {
-            const progressBars = document.querySelectorAll('.progress-fill');
-            progressBars.forEach(bar => {
-                const width = bar.style.width;
-                bar.style.width = '0%';
-                setTimeout(() => {
-                    bar.style.width = width;
-                }, 500);
+        function renderExpenses(expenses) {
+            expenseTableBody.innerHTML = '';
+            expenses.forEach(expense => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+        <td>${expense.title}</td>
+        <td>${expense.amount.toFixed(2)}</td>
+        <td>${expense.category}</td>
+        <td>${new Date(expense.date).toLocaleDateString()}</td>
+        <td>
+          <button onclick="editExpense(${expense.id})">Edit</button>
+          <button onclick="deleteExpense(${expense.id})">Delete</button>
+        </td>
+      `;
+                expenseTableBody.appendChild(tr);
             });
+        }
+
+        // Form submit handler (add or edit)
+        expenseForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = expenseIdInput.value;
+            const expenseData = {
+                title: titleInput.value.trim(),
+                amount: parseFloat(amountInput.value),
+                category: categoryInput.value.trim(),
+                date: dateInput.value ? new Date(dateInput.value).toISOString() : new Date().toISOString()
+            };
+
+            try {
+                if (id) {
+                    // Edit
+                    const res = await fetch(`${apiUrl}/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(expenseData)
+                    });
+                    if (!res.ok) throw new Error('Update failed');
+                } else {
+                    // Add
+                    const res = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(expenseData)
+                    });
+                    if (!res.ok) throw new Error('Add failed');
+                }
+                resetForm();
+                fetchExpenses();
+            } catch (err) {
+                alert(err.message);
+            }
         });
+
+        // Edit expense: fill form with selected data
+        window.editExpense = async function (id) {
+            try {
+                const res = await fetch(`${apiUrl}/${id}`);
+                if (!res.ok) throw new Error('Expense not found');
+                const expense = await res.json();
+                expenseIdInput.value = expense.id;
+                titleInput.value = expense.title;
+                amountInput.value = expense.amount;
+                categoryInput.value = expense.category;
+                dateInput.value = expense.date ? expense.date.split('T')[0] : '';
+                cancelEditBtn.style.display = 'inline-block';
+            } catch {
+                alert('Failed to load expense for editing.');
+            }
+        }
+
+        // Delete expense
+        window.deleteExpense = async function (id) {
+            if (!confirm('Are you sure you want to delete this expense?')) return;
+            try {
+                const res = await fetch(`${apiUrl}/${id}`, { method: 'DELETE' });
+                if (!res.ok) throw new Error('Delete failed');
+                fetchExpenses();
+            } catch {
+                alert('Failed to delete expense.');
+            }
+        }
+
+        // Cancel editing
+        cancelEditBtn.addEventListener('click', () => {
+            resetForm();
+        });
+
+        function resetForm() {
+            expenseForm.reset();
+            expenseIdInput.value = '';
+            cancelEditBtn.style.display = 'none';
+        }
+
+        // Initialize
+        fetchExpenses();
     </script>
+
 </body>
+
 </html>
