@@ -1,0 +1,42 @@
+Software Design Document:
+Discuss and explain the following subjects in this document for the selected use case. Provide
+UML diagrams when necessary.
+    • System Overview
+    • System Context
+    • Key Features and Functionality
+    • Assumptions and Dependencies
+    • Architectural Design
+        o System Architecture Diagram (High-Level)
+        o Architectural Patterns and Styles (e.g., Microservices, MVC, Layered)
+        o Rationale for Architectural Decisions
+    • Component Design
+        o Subsystems and Modules
+        o Responsibilities of Each Component
+        o Interfaces Between Components
+        o Component Diagrams
+    • Data Design
+        o Data Model / ER Diagram
+        o Data Storage (Database or File Structure)
+        o Data Flow Diagrams
+        o Data Validation Rules
+    • Design Patterns
+        o Applied Design Patterns
+        o Context and Justification
+    • Implementation Notes
+    • User Interface Design (if applicable)
+        o UI Mockups or Wireframes
+    • External Interfaces
+        o APIs
+        o Third-party Systems
+    • Performance Considerations
+        o Performance Requirements
+        o Scalability & Optimization Strategies
+    • Error Handling and Logging
+        o Exception Management
+        o Logging Mechanisms
+    • Design for Testability
+    • Deployment and Installation Design
+        o Environment Configuration
+        o Packaging and Dependencies
+    • Change Log
+    • Future Work / Open Issues
