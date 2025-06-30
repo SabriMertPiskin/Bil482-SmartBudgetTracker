@@ -45,10 +45,10 @@
 | Backend - API Implementation           | Add/Edit/Delete Expense için endpoint yazımı                                | Çağan Durgun        |                   | ✅ Completed   | June 28, 2025  |
 | Frontend - UI Design                   | Expense işlemleri için arayüz tasarımı                                      |                     |                   | ✅ Completed   | June 27, 2025  |
 | Frontend - API Integration             | Endpoint'lerin frontend'e entegre edilmesi                                  |                     | Çağan Durgun      | ✅ Completed   | June 29, 2025  |
-| Integration & Testing                  | Uçtan uca test, hataların giderilmesi                                       | Çağan Durgun        |                   | ✅ Completed   | June 30, 2025  |
+| Integration & Testing                  | Uçtan uca test, hataların giderilmesi                                       |                     | Çağan Durgun      | ✅ Completed   | June 30, 2025  |
 |                                        |                                                                             |                     |                   |                |                |
 | GitHub Repository Setup                | Repo yapısı, dizin organizasyonu                                            |                     |                   | ✅ Completed   | June 25, 2025  |
-| `TASK_MATRIX.md`                       | Görev dağılımı dokümantasyonu                                               |                     |                   | ✅ Completed   | June 26, 2025  |
+| `TASK_MATRIX.md`                       | Görev dağılımı dokümantasyonu                                               | Çağan Durgun        |                   | ✅ Completed   | June 26, 2025  |
 | `README.md`                            | Proje açıklama ve kullanım rehberi                                          |                     |                   | ✅ Completed   | June 30, 2025  |
 
 ---
