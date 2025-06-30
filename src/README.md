@@ -1,9 +1,7 @@
 # Include a Readme.md file in the project to guide the reviewer about the project.
 
 ## Authors
-
-
-
+- Çağan Durgun
 
 ## Git ile Değişiklikleri GitHub’a Gönderme (Push) — 3 Adım
 
