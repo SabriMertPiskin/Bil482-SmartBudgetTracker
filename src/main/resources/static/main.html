@@ -7,39 +7,173 @@
     <title>Smart Budget Tracker</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 2rem;
+            background: #f5f7fa;
+            color: #222;
         }
 
-        input,
-        select {
-            margin: 0.5rem 0;
-            padding: 0.3rem;
-            width: 100%;
-            max-width: 300px;
+        h1,
+        h2 {
+            font-weight: 600;
         }
 
         button {
-            padding: 0.5rem 1rem;
-            margin-top: 0.5rem;
+            cursor: pointer;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
         }
 
         table {
             border-collapse: collapse;
-            margin-top: 2rem;
+            margin-top: 1.5rem;
             width: 100%;
-            max-width: 700px;
+            max-width: 800px;
+            background: white;
+            box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+            border-radius: 6px;
+            overflow: hidden;
         }
 
         th,
         td {
-            border: 1px solid #ccc;
-            padding: 0.5rem;
+            padding: 1rem 1.2rem;
             text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #007bff;
+            color: white;
+            font-weight: 600;
         }
 
         tr:hover {
-            background-color: #f9f9f9;
+            background-color: #e9f0ff;
+        }
+
+        .actions button {
+            margin-right: 0.4rem;
+            background-color: #17a2b8;
+            padding: 0.3rem 0.7rem;
+            font-size: 0.9rem;
+        }
+
+        .actions button.delete-btn {
+            background-color: #dc3545;
+        }
+
+        .actions button:hover {
+            opacity: 0.9;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(2px);
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: slideDown 0.3s ease forwards;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-weight: 600;
+            color: #444;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"] {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            margin-bottom: 1.2rem;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .modal-actions {
+            text-align: right;
+        }
+
+        .modal-actions button {
+            margin-left: 0.5rem;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 0.6rem;
+            right: 1rem;
+            background: transparent;
+            border: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #555;
         }
     </style>
 </head>
@@ -48,31 +182,9 @@
 
     <h1>Smart Budget Tracker</h1>
 
-    <h2>Add / Edit Expense</h2>
-    <form id="expenseForm">
-        <input type="hidden" id="expenseId" />
-        <label>
-            Title:<br />
-            <input type="text" id="title" required />
-        </label><br />
-        <label>
-            Amount:<br />
-            <input type="number" id="amount" step="0.01" min="0" required />
-        </label><br />
-        <label>
-            Category:<br />
-            <input type="text" id="category" required />
-        </label><br />
-        <label>
-            Date:<br />
-            <input type="date" id="date" required />
-        </label><br />
-        <button type="submit">Save Expense</button>
-        <button type="button" id="cancelEdit" style="display:none;">Cancel Edit</button>
-    </form>
+    <button id="addNewBtn">Add New Expense</button>
 
-    <h2>Expense List</h2>
-    <table id="expenseTable">
+    <table id="expenseTable" aria-label="Expense List">
         <thead>
             <tr>
                 <th>Title</th>
@@ -85,8 +197,40 @@
         <tbody></tbody>
     </table>
 
+    <!-- Modal -->
+    <div class="modal" id="expenseModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
+        <div class="modal-content">
+            <button class="close-btn" aria-label="Close modal">&times;</button>
+            <h2 id="modalTitle">Add Expense</h2>
+            <form id="expenseForm">
+                <input type="hidden" id="expenseId" />
+                <label for="title">Title</label>
+                <input type="text" id="title" required />
+
+                <label for="amount">Amount</label>
+                <input type="number" id="amount" step="0.01" min="0" required />
+
+                <label for="category">Category</label>
+                <input type="text" id="category" required />
+
+                <label for="date">Date</label>
+                <input type="date" id="date" required />
+
+                <div class="modal-actions">
+                    <button type="button" id="cancelEdit">Cancel</button>
+                    <button type="submit" id="saveBtn">Save Expense</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
-        const apiUrl = 'http://localhost:8080/expenses'; // Backend URL
+        const apiUrl = 'http://localhost:8080/expenses';
+
+        const modal = document.getElementById('expenseModal');
+        const addNewBtn = document.getElementById('addNewBtn');
+        const closeBtn = modal.querySelector('.close-btn');
+        const cancelEditBtn = document.getElementById('cancelEdit');
 
         const expenseForm = document.getElementById('expenseForm');
         const expenseIdInput = document.getElementById('expenseId');
@@ -94,8 +238,44 @@
         const amountInput = document.getElementById('amount');
         const categoryInput = document.getElementById('category');
         const dateInput = document.getElementById('date');
-        const cancelEditBtn = document.getElementById('cancelEdit');
+
         const expenseTableBody = document.querySelector('#expenseTable tbody');
+        const modalTitle = document.getElementById('modalTitle');
+
+        // Show modal for Add
+        addNewBtn.addEventListener('click', () => {
+            resetForm();
+            modalTitle.textContent = 'Add Expense';
+            showModal();
+        });
+
+        // Close modal handlers
+        closeBtn.addEventListener('click', () => {
+            hideModal();
+        });
+        cancelEditBtn.addEventListener('click', () => {
+            hideModal();
+        });
+
+        // Keyboard accessibility: close modal on Escape
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                hideModal();
+            }
+        });
+
+        function showModal() {
+            modal.classList.add('active');
+            expenseIdInput.focus();
+            // prevent background scroll
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideModal() {
+            modal.classList.remove('active');
+            resetForm();
+            document.body.style.overflow = '';
+        }
 
         // Fetch and render expenses
         async function fetchExpenses() {
@@ -103,7 +283,7 @@
                 const res = await fetch(apiUrl);
                 const expenses = await res.json();
                 renderExpenses(expenses);
-            } catch (e) {
+            } catch {
                 alert('Error loading expenses.');
             }
         }
@@ -113,15 +293,15 @@
             expenses.forEach(expense => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-        <td>${expense.title}</td>
-        <td>${expense.amount.toFixed(2)}</td>
-        <td>${expense.category}</td>
-        <td>${new Date(expense.date).toLocaleDateString()}</td>
-        <td>
-          <button onclick="editExpense(${expense.id})">Edit</button>
-          <button onclick="deleteExpense(${expense.id})">Delete</button>
-        </td>
-      `;
+                <td>${expense.title}</td>
+                <td>${expense.amount.toFixed(2)}</td>
+                <td>${expense.category}</td>
+                <td>${new Date(expense.date).toLocaleDateString()}</td>
+                <td class="actions">
+                    <button onclick="editExpense(${expense.id})" aria-label="Edit expense ${expense.title}">Edit</button>
+                    <button onclick="deleteExpense(${expense.id})" class="delete-btn" aria-label="Delete expense ${expense.title}">Delete</button>
+                </td>
+            `;
                 expenseTableBody.appendChild(tr);
             });
         }
@@ -155,14 +335,14 @@
                     });
                     if (!res.ok) throw new Error('Add failed');
                 }
-                resetForm();
+                hideModal();
                 fetchExpenses();
             } catch (err) {
                 alert(err.message);
             }
         });
 
-        // Edit expense: fill form with selected data
+        // Edit expense: fill form and show modal
         window.editExpense = async function (id) {
             try {
                 const res = await fetch(`${apiUrl}/${id}`);
@@ -173,7 +353,8 @@
                 amountInput.value = expense.amount;
                 categoryInput.value = expense.category;
                 dateInput.value = expense.date ? expense.date.split('T')[0] : '';
-                cancelEditBtn.style.display = 'inline-block';
+                modalTitle.textContent = 'Edit Expense';
+                showModal();
             } catch {
                 alert('Failed to load expense for editing.');
             }
@@ -191,15 +372,9 @@
             }
         }
 
-        // Cancel editing
-        cancelEditBtn.addEventListener('click', () => {
-            resetForm();
-        });
-
         function resetForm() {
             expenseForm.reset();
             expenseIdInput.value = '';
-            cancelEditBtn.style.display = 'none';
         }
 
         // Initialize

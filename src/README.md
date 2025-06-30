@@ -37,4 +37,4 @@ Eğer ana dalın adı farklıysa `main` yerine onun ismini yaz.
 
 - `pom.xml` dosyası güncellenerek gerekli bağımlılıklar eklendi. Özellikle Spring Boot, JPA, Lombok ve MySQL için ihtiyaç duyulan bağımlılıklar doğru versiyonlarla projeye entegre edildi.
 
-- DB ayakta, edit fonksiyonu dışında çalışıyor.
+- DB ayakta, edit fonksiyonu dahil çalışıyor, frontend güncellendi.
