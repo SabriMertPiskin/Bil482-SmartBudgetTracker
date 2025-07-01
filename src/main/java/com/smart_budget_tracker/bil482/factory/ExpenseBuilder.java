@@ -4,6 +4,9 @@ import com.smart_budget_tracker.bil482.entity.Expense;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * @author Çağan Durgun
+ */
 public abstract class ExpenseBuilder {
     protected Expense expense;
 

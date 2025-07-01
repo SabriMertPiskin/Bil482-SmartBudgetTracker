@@ -3,6 +3,9 @@ package com.smart_budget_tracker.bil482.command;
 import com.smart_budget_tracker.bil482.entity.Expense;
 import com.smart_budget_tracker.bil482.service.ExpenseService;
 
+/**
+ * @author Çağan Durgun
+ */
 public class AddExpenseCommand implements ExpenseCommand {
     private final ExpenseService expenseService;
     private final Expense expense;

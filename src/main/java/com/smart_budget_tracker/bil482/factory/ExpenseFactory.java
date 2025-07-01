@@ -2,6 +2,9 @@ package com.smart_budget_tracker.bil482.factory;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Çağan Durgun
+ */
 @Component
 public class ExpenseFactory {
 

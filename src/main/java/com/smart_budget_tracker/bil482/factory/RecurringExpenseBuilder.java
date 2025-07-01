@@ -1,5 +1,8 @@
 package com.smart_budget_tracker.bil482.factory;
 
+/**
+ * @author Çağan Durgun
+ */
 public class RecurringExpenseBuilder extends ExpenseBuilder {
 
     @Override
