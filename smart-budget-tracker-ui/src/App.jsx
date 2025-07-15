@@ -1,55 +1,51 @@
 import { useState, useEffect } from 'react';
-// Bileşenleri import ediyoruz
 import ExpenseForm from './components/ExpenseForm';
-import BudgetStatus from './components/BudgetStatus'; // Yeni bileşen
+import BudgetStatus from './components/BudgetStatus';
 import Analytics from './components/Analytics';
-import RecentExpenses from './components/RecentExpenses'; // Yeni bileşen
-// Servisleri import ediyoruz (API bağlantısı için)
-import { getAllExpenses, createExpense, deleteExpense } from './services/expenseService';
-// Stil dosyamız
+import RecentExpenses from './components/RecentExpenses';
+import BudgetModal from './components/BudgetModal';
+import { getAllExpenses, createExpense } from './services/expenseService';
 import './App.css';
 
 function App() {
     const [expenses, setExpenses] = useState([]);
+    const [isBudgetModalOpen, setBudgetModalOpen] = useState(false);
 
     const fetchExpenses = async () => {
         try {
             const response = await getAllExpenses();
             setExpenses(response.data);
+            console.log("Backend'den veriler başarıyla çekildi.");
         } catch (error) {
-            console.error('Harcamaları getirirken hata oluştu:', error);
+            console.error('Backend bağlantı hatası! Mock veriler kullanılıyor:', error);
+            const mockExpenses = [
+                { id: 1, title: 'Öğle Yemeği', amount: 445.00, category: 'Yemek', date: '2025-07-15T14:30:00Z' },
+                { id: 2, title: 'Otobüs Bileti', amount: 815.00, category: 'Ulaşım', date: '2025-07-15T09:15:00Z' },
+                { id: 3, title: 'Market Alışverişi', amount: 8156.50, category: 'Alışveriş', date: '2025-07-14T18:00:00Z' },
+                { id: 4, title: 'Sinema Bileti', amount: 835.00, category: 'Eğlence', date: '2025-07-14T20:00:00Z' }
+            ];
+            setExpenses(mockExpenses);
         }
     };
 
     useEffect(() => {
-        // Mock data yerine API'den veri çekmek için bu satırı aktif et
-        // fetchExpenses();
-
-        // Geliştirme için sahte veri (Backend çalıştırmadan denemek için)
-        const mockExpenses = [
-            { id: 1, title: 'Öğle Yemeği', amount: 445.00, category: 'Yemek', date: '2025-07-15T14:30:00Z' },
-            { id: 2, title: 'Otobüs Bilet', amount: 815.00, category: 'Ulaşım', date: '2025-07-15T09:15:00Z' },
-            { id: 3, title: 'Market Alışverişi', amount: 8156.50, category: 'Alışveriş', date: '2025-07-14T18:00:00Z' },
-            { id: 4, title: 'Sinema Bileti', amount: 835.00, category: 'Eğlence', date: '2025-07-14T20:00:00Z' }
-        ];
-        setExpenses(mockExpenses);
-
+        fetchExpenses();
     }, []);
 
     const handleAddExpense = async (expenseData) => {
-        // Sahte veri listesine ekleme
-        const newExpense = { id: Date.now(), ...expenseData, date: new Date().toISOString() };
-        setExpenses(prevExpenses => [newExpense, ...prevExpenses]);
-
-        // API ile çalışırken kullanılacak kod
-        /*
         try {
             await createExpense(expenseData);
             fetchExpenses();
         } catch (error) {
             console.error('Harcama eklenirken hata:', error);
+            const newExpense = { id: Date.now(), ...expenseData, date: new Date().toISOString() };
+            setExpenses(prevExpenses => [newExpense, ...prevExpenses]);
         }
-        */
+    };
+    
+    const handleSaveBudget = (budgetData) => {
+        console.log('Kaydedilen Bütçe:', budgetData);
+        alert(`${budgetData.category} kategorisi için bütçe ₺${budgetData.limit} olarak ayarlandı.`);
     };
 
     return (
@@ -68,18 +64,23 @@ function App() {
                 </div>
                 <div className="card">
                     <h2><i className="icon">🎯</i> Bütçe Durumu</h2>
-                    <BudgetStatus />
+                    <BudgetStatus onSetBudget={() => setBudgetModalOpen(true)} />
                 </div>
                 <div className="card large">
                     <h2><i className="icon">📊</i> Harcama Analizi</h2>
-                    <p className="placeholder-text">Grafik burada görüntülenecek</p>
-                    {/* <Analytics expenses={expenses} /> */}
+                     <Analytics expenses={expenses} />
                 </div>
                 <div className="card large">
                     <h2><i className="icon">📜</i> Son Harcamalar</h2>
                     <RecentExpenses expenses={expenses} />
                 </div>
             </main>
+
+            <BudgetModal
+                isOpen={isBudgetModalOpen}
+                onClose={() => setBudgetModalOpen(false)}
+                onSaveBudget={handleSaveBudget}
+            />
         </div>
     );
 }

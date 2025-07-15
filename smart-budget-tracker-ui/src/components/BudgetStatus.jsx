@@ -6,22 +6,29 @@ const budgetItems = [
     { category: 'Eğlence', icon: '🎬', spent: '₺1,050', total: '₺1,800', color: '#FFCE56' }
 ];
 
-const BudgetStatus = () => {
+// onSetBudget prop'unu ekliyoruz
+const BudgetStatus = ({ onSetBudget }) => {
     return (
-        <div className="budget-status-list">
-            {budgetItems.map(item => (
-                <div key={item.category} className="budget-item">
-                    <div className="budget-item-icon" style={{ backgroundColor: item.color }}>{item.icon}</div>
-                    <div className="budget-item-details">
-                        <span>{item.category}</span>
+        <>
+            {/* Bütçe belirleme butonu */}
+            <button onClick={onSetBudget} className="set-budget-btn">
+                + Yeni Bütçe Belirle
+            </button>
+            <div className="budget-status-list">
+                {budgetItems.map(item => (
+                    <div key={item.category} className="budget-item">
+                        <div className="budget-item-icon" style={{ backgroundColor: item.color }}>{item.icon}</div>
+                        <div className="budget-item-details">
+                            <span>{item.category}</span>
+                        </div>
+                        <div className="budget-item-amount">
+                            <span>{item.spent}</span>
+                            <span className="total">/ {item.total}</span>
+                        </div>
                     </div>
-                    <div className="budget-item-amount">
-                        <span>{item.spent}</span>
-                        <span className="total">/ {item.total}</span>
-                    </div>
-                </div>
-            ))}
-        </div>
+                ))}
+            </div>
+        </>
     );
 };
 
