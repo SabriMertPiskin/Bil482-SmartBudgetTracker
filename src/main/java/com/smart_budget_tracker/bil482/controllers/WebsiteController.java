@@ -12,6 +12,6 @@ public class WebsiteController {
     /// Yazılımın giriş fonksiyonu.
     @GetMapping("/")
     public String showHomePage() {
-        return "redirect:/main.html"; // ✅ Static dosya için redirect
+        return "redirect:/index.html"; // ✅ Static dosya için redirect
     }
 }
