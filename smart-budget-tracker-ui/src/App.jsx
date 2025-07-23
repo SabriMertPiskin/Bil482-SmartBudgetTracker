@@ -4,7 +4,7 @@ import BudgetStatus from './components/BudgetStatus';
 import Analytics from './components/Analytics';
 import RecentExpenses from './components/RecentExpenses';
 import BudgetModal from './components/BudgetModal';
-import { getAllExpenses, createExpense } from './services/expenseService';
+import { getAllExpenses, createExpense, deleteExpense, updateExpense } from './services/expenseService';
 import './App.css';
 
 function App() {
@@ -42,7 +42,27 @@ function App() {
             setExpenses(prevExpenses => [newExpense, ...prevExpenses]);
         }
     };
+    const handleDeleteExpense = async (id) => {
+        try {
+            await deleteExpense(id);
+            fetchExpenses();
+        } catch (error) {
+            console.error('Harcama silinirken hata:', error);
+            setExpenses(prev => prev.filter(e => e.id !== id));
+        }
+    };
     
+    const handleEditExpense = async (id, expenseData) => {
+        try {
+            await updateExpense(id, expenseData);
+            fetchExpenses();
+        } catch (error) {
+            console.error('Harcama güncellenirken hata:', error);
+            setExpenses(prev =>
+                prev.map(e => e.id === id ? { ...e, ...expenseData } : e)
+            );
+        }
+    };
     const handleSaveBudget = (budgetData) => {
         console.log('Kaydedilen Bütçe:', budgetData);
         alert(`${budgetData.category} kategorisi için bütçe ₺${budgetData.limit} olarak ayarlandı.`);
@@ -72,7 +92,10 @@ function App() {
                 </div>
                 <div className="card large">
                     <h2><i className="icon">📜</i> Son Harcamalar</h2>
-                    <RecentExpenses expenses={expenses} />
+                    <RecentExpenses
+    expenses={expenses}
+    onDelete={handleDeleteExpense}
+    onEdit={handleEditExpense}/>
                 </div>
             </main>
 
