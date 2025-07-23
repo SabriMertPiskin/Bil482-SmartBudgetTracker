@@ -1,10 +1,8 @@
 package com.smart_budget_tracker.bil482.service;
 
-import com.smart_budget_tracker.bil482.usecase_2.observer.BudgetManager;
 import com.smart_budget_tracker.bil482.entity.Expense;
 import com.smart_budget_tracker.bil482.repository.ExpenseRepository;
 import org.springframework.stereotype.Service;
-
 
 import java.util.List;
 import java.util.Optional;
@@ -16,21 +14,18 @@ import java.util.Optional;
 public class ExpenseService {
 
     private final ExpenseRepository expenseRepository;
-    private final BudgetManager budgetManager;
 
     public List<Expense> getAllExpenses() {
         return expenseRepository.findAll();
     }
 
-   public ExpenseService(ExpenseRepository expenseRepository, BudgetManager budgetManager) {
+    public ExpenseService(ExpenseRepository expenseRepository) {
         this.expenseRepository = expenseRepository;
-        this.budgetManager = budgetManager;
     }
 
     public Expense addExpense(Expense expense) {
-        Expense savedExpense = expenseRepository.save(expense);
-        budgetManager.notifyObservers(savedExpense); // Observer'ları tetikle
-        return savedExpense;
+        // Basit validasyonlar yapılabilir burada
+        return expenseRepository.save(expense);
     }
 
     public Optional<Expense> getExpenseById(Long id) {
